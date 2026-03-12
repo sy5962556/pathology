@@ -217,3 +217,42 @@
   background: rgba(255, 123, 114, 0.1);
   color: var(--accent-secondary);
 }
+/* ─── Responsive Styles ─── */
+@media (max-width: 1024px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .data-table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .list-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .list-toolbar .search-bar {
+    max-width: none;
+  }
+  
+  .flex-align {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .pagination {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}

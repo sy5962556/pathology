@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Check, Sun, Moon } from 'lucide-react';
+import { Bell, Check, Sun, Moon, Menu } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
 import './Layout.css';
 
@@ -10,6 +10,8 @@ const Header = () => {
     setNotifications,
     isNotificationDropdownOpen,
     setIsNotificationDropdownOpen,
+    isSidebarOpen,
+    setIsSidebarOpen,
     theme,
     toggleTheme
   } = useAppData();
@@ -38,6 +40,9 @@ const Header = () => {
 
   return (
     <header className="header glass-panel">
+      <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(true)}>
+        <Menu size={24} />
+      </button>
       <div></div>
       <div className="header-actions">
         <button className="icon-btn theme-toggle" onClick={toggleTheme} title="Toggle Theme">

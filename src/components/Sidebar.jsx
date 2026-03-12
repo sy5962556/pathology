@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Activity, X } from 'lucide-react';
+import { useAppData } from '../context/AppDataContext';
 import './Layout.css';
 
 const Sidebar = () => {
+  const { setIsSidebarOpen } = useAppData();
   const location = useLocation();
 
   const navItems = [
@@ -16,6 +18,9 @@ const Sidebar = () => {
       <div className="sidebar-brand">
         <Activity className="brand-icon" size={28} />
         <h2>NeedyPath</h2>
+        <button className="sidebar-close-btn" onClick={() => setIsSidebarOpen(false)}>
+          <X size={20} />
+        </button>
       </div>
       <nav className="sidebar-nav">
         {navItems.map((item) => (

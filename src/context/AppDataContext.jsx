@@ -72,6 +72,7 @@ export const AppDataProvider = ({ children }) => {
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
 
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark';
   });
@@ -172,6 +173,7 @@ export const AppDataProvider = ({ children }) => {
       globalSearchQuery, setGlobalSearchQuery,
       notifications, setNotifications,
       isNotificationDropdownOpen, setIsNotificationDropdownOpen,
+      isSidebarOpen, setIsSidebarOpen,
       theme, toggleTheme,
       toasts, addToast, removeToast
     }}>

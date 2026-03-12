@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import GlobalModals from './GlobalModals';
@@ -7,10 +8,21 @@ import { useAppData } from '../context/AppDataContext';
 import './Layout.css';
 
 const Layout = () => {
-  const { isNotificationDropdownOpen, theme } = useAppData();
+  const { isNotificationDropdownOpen, isSidebarOpen, setIsSidebarOpen } = useAppData();
+  const location = useLocation();
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
 
   return (
-    <div className="layout-container">
+    <div className={`layout-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
+      
       <div className={isNotificationDropdownOpen ? 'content-blur' : ''} style={{ display: 'contents' }}>
         <Sidebar />
       </div>
