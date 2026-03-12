@@ -1,0 +1,219 @@
+.list-page {
+  padding: 8px 16px 32px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+}
+
+.list-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.list-toolbar {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.list-toolbar .search-bar {
+  flex: 1;
+  max-width: 400px;
+}
+
+.flex-align {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.85rem;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.color-accent {
+  color: var(--accent-primary);
+}
+
+.action-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.action-icon-btn:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+/* Reusing data-table from Dashboard.css, ensuring container handles scroll */
+.list-content .data-table {
+  width: 100%;
+}
+
+.list-content .data-table th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-color);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  z-index: 10;
+}
+
+.table-container {
+  overflow-y: auto;
+  flex: 1;
+  position: relative;
+}
+
+.pagination {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-info {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.page-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.page-btn:not(:disabled):hover {
+  background: var(--bg-surface-hover);
+}
+
+.page-btn.active {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border-color: var(--accent-primary);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.action-btn-sm:hover {
+  transform: translateY(-2px);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+  background: rgba(var(--accent-primary-rgb), 0.1);
+}
+
+.action-btn-sm.view:hover { color: var(--accent-primary); border-color: var(--accent-primary); }
+.action-btn-sm.edit:hover { color: var(--accent-success); border-color: var(--accent-success); }
+.action-btn-sm.delete:hover { color: var(--accent-error); border-color: var(--accent-error); }
+
+/* Action Dropdown Styles (Restored for Patients page) */
+.action-dropdown {
+  position: absolute;
+  right: 24px;
+  top: 40px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  overflow: hidden;
+  animation: fadeSlide 0.2s ease-out forwards;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 16px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: rgba(var(--accent-primary-rgb), 0.1);
+  color: var(--accent-primary);
+}
+
+.dropdown-item.delete:hover {
+  background: rgba(255, 123, 114, 0.1);
+  color: var(--accent-secondary);
+}

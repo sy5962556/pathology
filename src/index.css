@@ -1,0 +1,170 @@
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark-theme {
+  /* Dark Theme variables */
+  --bg-color: #0d1117;
+  --bg-sidebar: #0d1117;
+  --bg-header: rgba(13, 17, 23, 0.4);
+  --bg-surface: rgba(22, 27, 34, 0.7);
+  --bg-surface-rgb: 22, 27, 34;
+  --bg-surface-solid: #161b22;
+  --bg-notification: #000000;
+  --bg-surface-hover: rgba(33, 38, 45, 0.8);
+  --bg-card: rgba(22, 27, 34, 0.5);
+  --bg-input: rgba(0, 0, 0, 0.3);
+  
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-inverse: #0d1117;
+  
+  --accent-primary: #58a6ff;
+  --accent-primary-rgb: 88, 166, 255;
+  --accent-secondary: #ff7b72;
+  --accent-secondary-rgb: 255, 123, 114;
+  --accent-success: #3fb950;
+  --accent-success-rgb: 63, 185, 80;
+  --accent-warning: #e3b341;
+  --accent-warning-rgb: 227, 179, 65;
+  
+  --border-color: rgba(240, 246, 252, 0.1);
+  --border-subtle: rgba(240, 246, 252, 0.05);
+  --border-strong: rgba(240, 246, 252, 0.2);
+  
+  --glass-blur: 16px;
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+  --overlay-blur: 4px;
+  
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+  
+  --bg-gradient: radial-gradient(circle at top right, rgba(88, 166, 255, 0.05), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(255, 123, 114, 0.05), transparent 40%);
+}
+
+.light-theme {
+  --bg-color: #f6f8fa;
+  --bg-sidebar: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.6);
+  --bg-surface: rgba(255, 255, 255, 0.8);
+  --bg-surface-rgb: 255, 255, 255;
+  --bg-surface-solid: #ffffff;
+  --bg-notification: #bef264;
+  --bg-surface-hover: rgba(246, 248, 250, 0.9);
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --text-inverse: #f0f6fc;
+  
+  --accent-primary: #0969da;
+  --accent-primary-rgb: 9, 105, 218;
+  --accent-secondary: #d1242f;
+  --accent-secondary-rgb: 209, 36, 47;
+  --accent-success: #1a7f37;
+  --accent-success-rgb: 26, 127, 55;
+  --accent-warning: #9a6700;
+  --accent-warning-rgb: 154, 103, 0;
+  
+  --border-color: rgba(31, 35, 40, 0.1);
+  --border-subtle: rgba(31, 35, 40, 0.05);
+  --border-strong: rgba(31, 35, 40, 0.2);
+  
+  --glass-blur: 12px;
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+  --overlay-blur: 3px;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  
+  --bg-gradient: radial-gradient(circle at top right, rgba(9, 105, 218, 0.03), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(209, 36, 47, 0.03), transparent 40%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: var(--bg-gradient);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  filter: brightness(1.2);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--bg-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-panel:hover {
+  border-color: rgba(240, 246, 252, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}

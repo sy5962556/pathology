@@ -1,0 +1,425 @@
+.report-wrapper {
+  padding: 16px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.report-paper {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 1000px;
+  padding: 0;
+  box-shadow: var(--shadow-lg);
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Header */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 32px 16px;
+  background: var(--bg-card);
+}
+
+.header-left {
+  display: flex;
+  gap: 16px;
+}
+
+.logo-circle {
+  width: 50px;
+  height: 50px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-inverse);
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.clinic-details h1 {
+  font-size: 24px;
+  margin: 0;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.clinic-details .blue-text {
+  color: var(--accent-primary);
+}
+
+.tagline {
+  font-size: 14px;
+  margin: 4px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tagline .icon {
+  color: #115bc5;
+}
+
+.address {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}
+
+.header-right {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.header-right p {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.stripe-bar {
+  background: linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.5) 0%, var(--accent-primary) 50%);
+  color: var(--text-inverse);
+  text-align: right;
+  padding: 4px 32px;
+  font-size: 11px;
+  position: relative;
+}
+
+.stripe-bar::before {
+  content: '';
+  position: absolute;
+  left: 200px;
+  bottom: 0;
+  height: 100%;
+  width: 100px;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0,0,0,0.2) 10px,
+    rgba(0,0,0,0.2) 20px
+  );
+}
+
+/* Patient Box */
+.patient-box {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--border-color);
+  padding: 16px 32px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.patient-col p {
+  margin: 2px 0;
+  color: var(--text-secondary);
+}
+
+.patient-name {
+  font-size: 16px;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.dr-ref {
+  margin-top: 12px !important;
+}
+
+.mock-qr {
+  width: 60px;
+  height: 60px;
+  background: repeating-linear-gradient(45deg, #000 0, #000 2px, transparent 2px, transparent 6px);
+  border: 1px solid #000;
+  margin-top: 10px;
+}
+
+.mock-barcode {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  letter-spacing: -2px;
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.ref-col {
+  border-left: 1px solid #ccc;
+  padding-left: 16px;
+}
+.date-col {
+  border-left: 1px solid #ccc;
+  padding-left: 16px;
+}
+.date-col p {
+  font-size: 10px;
+}
+
+/* Report Title */
+.report-title {
+  text-align: center;
+  margin: 16px 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* Table */
+.report-table {
+  width: calc(100% - 64px);
+  margin: 0 32px;
+  border-collapse: collapse;
+  font-size: 13px;
+  position: relative;
+}
+
+.report-table::before {
+  content: 'DrLogy';
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 140px;
+  color: rgba(230, 235, 245, 0.4);
+  z-index: 0;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.report-table thead th {
+  text-align: left;
+  padding: 8px 0;
+  border-top: 2px solid var(--border-strong);
+  border-bottom: 2px solid var(--border-strong);
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.report-table tbody td {
+  padding: 4px 0;
+  z-index: 1;
+  position: relative;
+  vertical-align: top;
+  color: var(--text-primary);
+}
+
+.report-table .section-title td {
+  font-weight: 700;
+  color: #000;
+  padding-top: 16px;
+  padding-bottom: 4px;
+}
+
+.report-table .sub-text {
+  font-size: 9px;
+  color: #777;
+  margin-top: -2px;
+}
+
+.border-bottom td {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.border-bottom-faded td {
+  padding-bottom: 16px;
+}
+
+.result-low {
+  color: var(--accent-primary) !important;
+  font-weight: bold;
+}
+
+.result-high {
+  color: #d12020 !important;
+  font-weight: bold;
+}
+
+.flag {
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* Footer Section */
+.report-footer-section {
+  padding: 16px 32px;
+  border-top: 1px solid #ddd;
+  margin-top: 16px;
+}
+
+.instruments {
+  font-size: 11px;
+  color: #333;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 16px;
+}
+
+.signature-area {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sig-box {
+  width: 30%;
+  text-align: center;
+}
+
+.sig-box p {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #000;
+}
+
+.sig-box .sub-title {
+  font-size: 10px;
+  color: #555;
+}
+
+.sig-box .thanks {
+  font-size: 10px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.sig-line {
+  margin-bottom: 4px;
+  height: 40px;
+  position: relative;
+}
+
+.mock-sig1 {
+  width: 80px; height: 30px; border-bottom: 2px solid #000; border-radius: 50%; border-right: 2px solid transparent; transform: rotate(-10deg); margin: 0 auto;
+}
+.mock-sig2 {
+  width: 60px; height: 35px; border-bottom: 2px solid #000; border-left: 2px solid #000; border-radius: 30%; transform: rotate(15deg); margin: 0 auto;
+}
+.mock-sig3 {
+  width: 90px; height: 25px; border-top: 2px solid #000; border-radius: 50%; transform: rotate(5deg); margin: 0 auto;
+}
+
+.gen-stamp {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  font-size: 10px;
+  color: #555;
+}
+
+.gen-stamp p {
+  margin: 0;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 32px;
+  position: relative;
+}
+
+.bottom-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 250px;
+  background: repeating-linear-gradient(
+    45deg,
+    #000,
+    #000 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+.delivery-truck {
+  position: absolute;
+  left: 260px;
+  font-size: 32px;
+  bottom: 0px;
+}
+
+.bottom-text {
+  color: #f7a835;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 40px;
+}
+
+.bottom-phone {
+  margin-left: auto;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wa-icon {
+  font-size: 24px;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .sidebar, .header, .hide-on-print, .GlobalModals {
+    display: none !important;
+  }
+  
+  .layout-container, .main-wrapper, .main-content {
+    display: block !important;
+    height: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .report-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .report-paper {
+    box-shadow: none;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* To force background colors and gradients in printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

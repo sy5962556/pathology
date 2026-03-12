@@ -1,0 +1,216 @@
+.edit-report-page {
+  padding: var(--padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.edit-report-page .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-report-page .header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-report-page .header-left h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-report-page .report-id {
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: var(--bg-surface-hover);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-color);
+}
+
+.edit-report-page .header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-container {
+  padding: 32px;
+}
+
+.edit-report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  font-size: 1.5rem;
+}
+
+.form-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-input, .form-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+}
+
+.results-edit-table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: rgba(0,0,0,0.1);
+}
+
+.results-edit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-edit-table th {
+  text-align: left;
+  padding: 14px;
+  background: var(--bg-surface-hover);
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+.results-edit-table td {
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.cell-input, .cell-select {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px;
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.cell-input:focus, .cell-select:focus {
+  outline: none;
+  background: var(--bg-input);
+  border-color: var(--accent-primary);
+}
+
+.cell-input.fw-600 {
+  font-weight: 600;
+}
+
+.empty-results {
+  text-align: center;
+  padding: 40px;
+  background: var(--bg-surface-hover);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  border: 2px dashed var(--border-color);
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--border-color);
+  border-radius: 50%;
+  display: inline-block;
+  border-top-color: var(--accent-primary);
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .edit-report-page {
+    padding: var(--padding-md);
+  }
+  
+  .edit-report-page .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .edit-report-page .header-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
