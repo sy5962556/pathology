@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
-import PDFGenerator from '../components/PDFGenerator';
 import './EditReport.css';
 
 const EditReport = () => {
@@ -71,17 +70,7 @@ const EditReport = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateTest(test.id, test);
-    
-    // Workflow enhancement: Ask for PDF generation
-    setTimeout(() => {
-      if (window.confirm('Report saved successfully. Would you like to generate the PDF report now?')) {
-        // Find the PDF download button and click it
-        const pdfBtn = document.querySelector('.edit-report-page .pdf-trigger button');
-        if (pdfBtn) pdfBtn.click();
-      } else {
-        navigate('/tests');
-      }
-    }, 100);
+    navigate('/tests');
   };
 
   return (
@@ -94,9 +83,6 @@ const EditReport = () => {
           <h1>Edit Report <span className="report-id">{test.id}</span></h1>
         </div>
         <div className="header-right">
-          <div className="pdf-trigger" style={{ display: 'none' }}>
-             <PDFGenerator test={test} addToast={addToast} />
-          </div>
           <button type="button" className="secondary-btn" onClick={() => navigate('/tests')}>
             Cancel
           </button>

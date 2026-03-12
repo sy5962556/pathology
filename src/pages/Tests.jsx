@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Download, Filter, Eye, Edit3, Trash2 } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
 import PDFGenerator from '../components/PDFGenerator';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import './SharedList.css';
 
 const Tests = () => {
-  const { tests, globalSearchQuery, setGlobalSearchQuery, addToast, updateTest } = useAppData();
+  const { tests, globalSearchQuery, setGlobalSearchQuery, addToast, deleteTest, updateTest } = useAppData();
   const [statusFilter, setStatusFilter] = useState('All');
+  const [isExporting, setIsExporting] = useState(false);
   const navigate = useNavigate();
-
-  // Removed click outside listener as we don't use the dropdown anymore
+  const bulkExportRef = useRef();
 
   const filteredTests = tests.filter(t => {
     const matchesSearch = t.patient.toLowerCase().includes(globalSearchQuery.toLowerCase()) || 
@@ -20,6 +22,54 @@ const Tests = () => {
     return matchesSearch && matchesStatus;
   });
 
+  const handleExport = async () => {
+    if (filteredTests.length === 0) {
+      addToast('No reports to export', 'error');
+      return;
+    }
+
+    setIsExporting(true);
+    addToast('Generating bulk report PDF...', 'info');
+
+    try {
+      const element = bulkExportRef.current;
+      element.style.display = 'block';
+      
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.setProperties({
+        title: `Pathology_Summary_${new Date().toISOString().split('T')[0]}`,
+        subject: 'Bulk Pathology Reports Summary',
+        author: 'PathoPro'
+      });
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      
+      // Open in new tab for preview
+      const pdfBlob = pdf.output('bloburl', { filename: `Reports_Summary_${new Date().toISOString().split('T')[0]}.pdf` });
+      window.open(pdfBlob, '_blank');
+      
+      element.style.display = 'none';
+      addToast('Bulk report preview opened in new tab!', 'success');
+    } catch (error) {
+      console.error('Export failed:', error);
+      addToast('Export failed. Please try again.', 'error');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="list-page animate-fade-in">
       <div className="page-header">
@@ -27,9 +77,6 @@ const Tests = () => {
           <h1>Test Reports</h1>
           <p>Access pathology test results and statuses.</p>
         </div>
-        <button className="primary-btn" onClick={() => setIsNewReportModalOpen(true)}>
-          <Plus size={18} /> New Test
-        </button>
       </div>
 
       <div className="list-content glass-panel">
@@ -57,7 +104,14 @@ const Tests = () => {
               <option value="In Progress" style={{ background: 'var(--bg-color)' }}>In Progress</option>
             </select>
           </div>
-          <button className="icon-btn" title="Export"><Download size={18} /></button>
+          <button 
+            className="icon-btn" 
+            title="Export All to PDF" 
+            onClick={handleExport}
+            disabled={isExporting}
+          >
+            <Download size={18} />
+          </button>
         </div>
 
         <div className="table-container">
@@ -135,6 +189,67 @@ const Tests = () => {
         </div>
       </div>
       
+      {/* Hidden Bulk Export Template */}
+      <div 
+        ref={bulkExportRef} 
+        style={{ 
+          display: 'none', 
+          width: '800px', 
+          padding: '40px', 
+          background: 'white', 
+          color: 'black',
+          fontFamily: "'Inter', sans-serif"
+        }}
+      >
+        <div style={{ borderBottom: '2px solid #0969da', paddingBottom: '20px', marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h1 style={{ margin: 0, color: '#0969da', fontSize: '24px' }}>PathoPro Reports Summary</h1>
+            <p style={{ margin: '5px 0 0', color: '#666', fontSize: '14px' }}>Comprehensive list of filtered pathology reports</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ margin: 0, fontSize: '12px' }}>Date: {new Date().toLocaleDateString()}</p>
+            <p style={{ margin: 0, fontSize: '12px' }}>Total Records: {filteredTests.length}</p>
+          </div>
+        </div>
+
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+          <thead>
+            <tr style={{ borderBottom: '2px solid #eee' }}>
+              <th style={{ textAlign: 'left', padding: '12px 8px' }}>Test ID</th>
+              <th style={{ textAlign: 'left', padding: '12px 8px' }}>Patient Name</th>
+              <th style={{ textAlign: 'left', padding: '12px 8px' }}>Test Type</th>
+              <th style={{ textAlign: 'left', padding: '12px 8px' }}>Date</th>
+              <th style={{ textAlign: 'left', padding: '12px 8px' }}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTests.map(t => (
+              <tr key={t.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                <td style={{ padding: '10px 8px', fontWeight: 'bold', color: '#0969da' }}>{t.id}</td>
+                <td style={{ padding: '10px 8px' }}>{t.patient}</td>
+                <td style={{ padding: '10px 8px' }}>{t.type}</td>
+                <td style={{ padding: '10px 8px' }}>{t.date}</td>
+                <td style={{ padding: '10px 8px' }}>
+                  <span style={{ 
+                    padding: '2px 8px', 
+                    borderRadius: '10px', 
+                    fontSize: '10px',
+                    background: t.status === 'Completed' ? '#dafbe1' : t.status === 'Pending' ? '#fff8c5' : '#ddf4ff',
+                    color: t.status === 'Completed' ? '#1a7f37' : t.status === 'Pending' ? '#9a6700' : '#0969da'
+                  }}>
+                    {t.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div style={{ marginTop: '50px', borderTop: '1px solid #eee', paddingTop: '20px', textAlign: 'center', fontSize: '10px', color: '#999' }}>
+          <p>This is an automatically generated summary report from PathoPro Pathology Management System.</p>
+          <p>© {new Date().getFullYear()} PathoPro Labs. All rights reserved.</p>
+        </div>
+      </div>
     </div>
   );
 };

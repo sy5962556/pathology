@@ -12,7 +12,7 @@ const PDFGenerator = ({ test, addToast }) => {
     e.stopPropagation();
     setIsGenerating(true);
     addToast('Generating PDF... please wait.', 'info');
-    
+
     try {
       const element = printRef.current;
       if (!element) return;
@@ -22,27 +22,36 @@ const PDFGenerator = ({ test, addToast }) => {
       element.style.position = 'absolute';
       element.style.left = '-9999px';
       element.style.top = '0';
-      
-      const canvas = await html2canvas(element, { 
+
+      const canvas = await html2canvas(element, {
         scale: 2, // High resolution
         useCORS: true,
         logging: false
       });
-      
+
       const imgData = canvas.toDataURL('image/png');
-      
+
       // A4 dimensions in mm: 210 x 297
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+
+      pdf.setProperties({
+        title: `${test.patient} - ${test.id}`,
+        subject: 'Pathology Report',
+        author: 'DrLogy Pathology Lab'
+      });
+
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`DrLogy_Report_${test.id}.pdf`);
-      
+
+      // Open in new tab for preview instead of direct download
+      const pdfBlob = pdf.output('bloburl', { filename: `${test.patient}_${test.id}.pdf` });
+      window.open(pdfBlob, '_blank');
+
       // Hide again
       element.style.display = 'none';
-      
-      addToast('PDF downloaded successfully!', 'success');
+
+      addToast('PDF preview opened in new tab!', 'success');
     } catch (error) {
       console.error('Error generating PDF:', error);
       addToast('Failed to generate PDF.', 'error');
@@ -53,9 +62,9 @@ const PDFGenerator = ({ test, addToast }) => {
 
   return (
     <>
-      <button 
-        className="icon-btn" 
-        onClick={generatePDF} 
+      <button
+        className="icon-btn"
+        onClick={generatePDF}
         disabled={isGenerating}
         title="Download PDF"
       >
@@ -63,8 +72,8 @@ const PDFGenerator = ({ test, addToast }) => {
       </button>
 
       {/* Hidden printable template - matches ReportView structure exactly */}
-      <div 
-        ref={printRef} 
+      <div
+        ref={printRef}
         style={{ display: 'none', background: 'white', width: '800px', fontFamily: "'Inter', sans-serif", color: 'black' }}
       >
         <div className="report-paper" style={{ boxShadow: 'none', margin: '0', padding: '0', minHeight: 'auto' }}>
@@ -97,18 +106,18 @@ const PDFGenerator = ({ test, addToast }) => {
               <p><strong>PID:</strong> {test.id.replace('T-', '')}</p>
             </div>
             <div className="patient-col qr-col">
-               <div className="mock-qr"></div>
+              <div className="mock-qr"></div>
             </div>
             <div className="patient-col ref-col">
-               <p><strong>Sample Collected At:</strong></p>
-               <p>125, Shivam Bungalow, S G Road, <br/>Mumbai</p>
-               <p className="dr-ref"><strong>Ref. By:</strong> {test.doctor}</p>
+              <p><strong>Sample Collected At:</strong></p>
+              <p>125, Shivam Bungalow, S G Road, <br />Mumbai</p>
+              <p className="dr-ref"><strong>Ref. By:</strong> {test.doctor}</p>
             </div>
             <div className="patient-col date-col">
-               <div className="mock-barcode">||||||||||||||||||||||||||||</div>
-               <p><strong>Registered on:</strong> 02:31 PM {test.date}</p>
-               <p><strong>Collected on:</strong> 03:11 PM {test.date}</p>
-               <p><strong>Reported on:</strong> 04:35 PM {test.date}</p>
+              <div className="mock-barcode">||||||||||||||||||||||||||||</div>
+              <p><strong>Registered on:</strong> 02:31 PM {test.date}</p>
+              <p><strong>Collected on:</strong> 03:11 PM {test.date}</p>
+              <p><strong>Reported on:</strong> 04:35 PM {test.date}</p>
             </div>
           </div>
 
@@ -132,7 +141,7 @@ const PDFGenerator = ({ test, addToast }) => {
               </tr>
               {(test.results || []).map((res, idx) => (
                 <React.Fragment key={idx}>
-                  {(idx === 0 || res.category !== test.results[idx-1].category) && (
+                  {(idx === 0 || res.category !== test.results[idx - 1].category) && (
                     <tr className="section-title">
                       <td colSpan="4">{res.category}</td>
                     </tr>
@@ -171,7 +180,7 @@ const PDFGenerator = ({ test, addToast }) => {
                 <p className="sub-title">(MD, Pathologist)</p>
               </div>
               <div className="sig-box no-border">
-                <div className="sig-line" style={{marginTop: '25px'}}><div className="mock-sig3"></div></div>
+                <div className="sig-line" style={{ marginTop: '25px' }}><div className="mock-sig3"></div></div>
                 <p><strong>Dr. Vimal Shah</strong></p>
                 <p className="sub-title">(MD, Pathologist)</p>
               </div>

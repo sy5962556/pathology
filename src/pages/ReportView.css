@@ -12,14 +12,24 @@
 }
 
 .report-paper {
-  background: var(--bg-card);
-  color: var(--text-primary);
+  /* Force light theme variables locally */
+  --bg-card: #ffffff;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --accent-primary: #0969da;
+  --accent-primary-rgb: 9, 105, 218;
+  --border-color: rgba(31, 35, 40, 0.1);
+  --border-strong: rgba(31, 35, 40, 0.2);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  background: #ffffff;
+  color: #1f2328;
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
   min-height: 1000px;
   padding: 0;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   font-family: 'Inter', sans-serif;
   position: relative;
   border-radius: 4px;

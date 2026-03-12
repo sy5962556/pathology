@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Activity } from 'lucide-react';
 import './Layout.css';
 
 const Sidebar = () => {
@@ -7,10 +7,8 @@ const Sidebar = () => {
 
   const navItems = [
     { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-    { path: '/patients', icon: <Users size={20} />, label: 'Patients' },
     { path: '/tests', icon: <FileText size={20} />, label: 'Test Reports' },
     { path: '/analytics', icon: <Activity size={20} />, label: 'Analytics' },
-    { path: '/settings', icon: <Settings size={20} />, label: 'Settings' },
   ];
 
   return (

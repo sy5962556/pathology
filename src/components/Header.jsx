@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Search, Check, Sun, Moon } from 'lucide-react';
+import { Bell, Check, Sun, Moon } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
 import './Layout.css';
 
 const Header = () => {
   const { 
     setIsNewReportModalOpen, 
-    globalSearchQuery, 
-    setGlobalSearchQuery,
     notifications,
     setNotifications,
     isNotificationDropdownOpen,
@@ -40,16 +38,7 @@ const Header = () => {
 
   return (
     <header className="header glass-panel">
-      <div className={`search-bar ${isNotificationDropdownOpen ? 'content-blur' : ''}`}>
-        <Search size={18} className="search-icon" />
-        <input 
-          type="text" 
-          placeholder="Search patients, tests, or reports..." 
-          className="search-input"
-          value={globalSearchQuery}
-          onChange={(e) => setGlobalSearchQuery(e.target.value)}
-        />
-      </div>
+      <div></div>
       <div className="header-actions">
         <button className="icon-btn theme-toggle" onClick={toggleTheme} title="Toggle Theme">
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}

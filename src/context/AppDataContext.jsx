@@ -1,8 +1,18 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AppDataContext = createContext();
 
 export const useAppData = () => useContext(AppDataContext);
+
+// ─── Helper: safe localStorage read ───
+const loadFromStorage = (key, fallback) => {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 const DEFAULT_TEST_RESULTS = [
   { category: 'HEMOGLOBIN', investigation: 'Hemoglobin (Hb)', result: '12.5', reference: '13.0 - 17.0', unit: 'g/dL', status: 'Low' },
@@ -17,45 +27,56 @@ const DEFAULT_TEST_RESULTS = [
   { category: 'PLATELET', investigation: 'Platelet Count', result: '320000', reference: '150000 - 410000', unit: 'cumm', status: 'Normal' }
 ];
 
-export const AppDataProvider = ({ children }) => {
-  const [patients, setPatients] = useState([
-    { id: 'P-9832', name: 'Maria Garcia', age: 45, gender: 'Female', lastVisit: '2023-10-24', status: 'Active' },
-    { id: 'P-9833', name: 'James Wilson', age: 62, gender: 'Male', lastVisit: '2023-10-22', status: 'Active' },
-    { id: 'P-9834', name: 'Robert Chen', age: 28, gender: 'Male', lastVisit: '2023-09-15', status: 'Inactive' },
-    { id: 'P-9835', name: 'Anita Patel', age: 34, gender: 'Female', lastVisit: '2023-10-25', status: 'Active' },
-    { id: 'P-9836', name: 'David Smith', age: 51, gender: 'Male', lastVisit: '2023-08-30', status: 'Active' },
-    { id: 'P-9837', name: 'Elena Rostova', age: 39, gender: 'Female', lastVisit: '2023-10-26', status: 'New' },
-  ]);
+// ─── Default seed data (used only on first-ever load) ───
+const DEFAULT_PATIENTS = [
+  { id: 'P-9832', name: 'Maria Garcia', age: 45, gender: 'Female', lastVisit: '2023-10-24', status: 'Active' },
+  { id: 'P-9833', name: 'James Wilson', age: 62, gender: 'Male', lastVisit: '2023-10-22', status: 'Active' },
+  { id: 'P-9834', name: 'Robert Chen', age: 28, gender: 'Male', lastVisit: '2023-09-15', status: 'Inactive' },
+  { id: 'P-9835', name: 'Anita Patel', age: 34, gender: 'Female', lastVisit: '2023-10-25', status: 'Active' },
+  { id: 'P-9836', name: 'David Smith', age: 51, gender: 'Male', lastVisit: '2023-08-30', status: 'Active' },
+  { id: 'P-9837', name: 'Elena Rostova', age: 39, gender: 'Female', lastVisit: '2023-10-26', status: 'New' },
+];
 
-  const [tests, setTests] = useState([
-    { id: 'T-1042', patient: 'James Wilson', type: 'Complete Blood Count', doctor: 'Dr. Smith', date: '2023-10-24', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '62', sex: 'Male' },
-    { id: 'T-1043', patient: 'Maria Garcia', type: 'Lipid Panel', doctor: 'Dr. Adams', date: '2023-10-24', status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '45', sex: 'Female' },
-    { id: 'T-1044', patient: 'Robert Chen', type: 'Thyroid Function', doctor: 'Dr. Smith', date: '2023-10-25', status: 'In Progress', results: DEFAULT_TEST_RESULTS, age: '28', sex: 'Male' },
-    { id: 'T-1045', patient: 'Anita Patel', type: 'Urinalysis', doctor: 'Dr. Lee', date: '2023-10-25', status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '34', sex: 'Female' },
-    { id: 'T-1046', patient: 'David Smith', type: 'Glucose Tolerance', doctor: 'Dr. Adams', date: '2023-10-26', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '51', sex: 'Male' },
-    { id: 'T-1047', patient: 'Elena Rostova', type: 'Liver Panel', doctor: 'Dr. Lee', date: '2023-10-26', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '39', sex: 'Female' },
-  ]);
+const DEFAULT_TESTS = [
+  { id: 'T-1042', patient: 'James Wilson', type: 'Complete Blood Count', doctor: 'Dr. Smith', date: '2023-10-24', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '62', sex: 'Male' },
+  { id: 'T-1043', patient: 'Maria Garcia', type: 'Lipid Panel', doctor: 'Dr. Adams', date: '2023-10-24', status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '45', sex: 'Female' },
+  { id: 'T-1044', patient: 'Robert Chen', type: 'Thyroid Function', doctor: 'Dr. Smith', date: '2023-10-25', status: 'In Progress', results: DEFAULT_TEST_RESULTS, age: '28', sex: 'Male' },
+  { id: 'T-1045', patient: 'Anita Patel', type: 'Urinalysis', doctor: 'Dr. Lee', date: '2023-10-25', status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '34', sex: 'Female' },
+  { id: 'T-1046', patient: 'David Smith', type: 'Glucose Tolerance', doctor: 'Dr. Adams', date: '2023-10-26', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '51', sex: 'Male' },
+  { id: 'T-1047', patient: 'Elena Rostova', type: 'Liver Panel', doctor: 'Dr. Lee', date: '2023-10-26', status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '39', sex: 'Female' },
+];
+
+const DEFAULT_NOTIFICATIONS = [
+  { id: 1, text: 'New report ready for Patient ID: #1234', time: '2 mins ago', read: false },
+  { id: 2, text: 'Stock alert: Reagents running low', time: '1 hour ago', read: false },
+  { id: 3, text: 'Maintenance scheduled for tonight at 10 PM', time: '3 hours ago', read: true },
+  { id: 4, text: 'Patient Sarah Smith marked as urgent', time: '5 hours ago', read: false },
+  { id: 5, text: 'Critical lab result for John Doe', time: '6 hours ago', read: false },
+  { id: 6, text: 'New staff member added to the system', time: '8 hours ago', read: true },
+  { id: 7, text: 'Weekly analytics report generated', time: '1 day ago', read: true },
+];
+
+export const AppDataProvider = ({ children }) => {
+  // ─── Persisted state: load from localStorage, fall back to defaults ───
+  const [patients, setPatients] = useState(() => loadFromStorage('pathology_patients', DEFAULT_PATIENTS));
+  const [tests, setTests] = useState(() => loadFromStorage('pathology_tests', DEFAULT_TESTS));
+  const [notifications, setNotifications] = useState(() => loadFromStorage('pathology_notifications', DEFAULT_NOTIFICATIONS));
+
+  // ─── Sync to localStorage on every change ───
+  useEffect(() => { localStorage.setItem('pathology_patients', JSON.stringify(patients)); }, [patients]);
+  useEffect(() => { localStorage.setItem('pathology_tests', JSON.stringify(tests)); }, [tests]);
+  useEffect(() => { localStorage.setItem('pathology_notifications', JSON.stringify(notifications)); }, [notifications]);
 
   const [isNewReportModalOpen, setIsNewReportModalOpen] = useState(false);
   const [isNewPatientModalOpen, setIsNewPatientModalOpen] = useState(false);
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
-  
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: 'New report ready for Patient ID: #1234', time: '2 mins ago', read: false },
-    { id: 2, text: 'Stock alert: Reagents running low', time: '1 hour ago', read: false },
-    { id: 3, text: 'Maintenance scheduled for tonight at 10 PM', time: '3 hours ago', read: true },
-    { id: 4, text: 'Patient Sarah Smith marked as urgent', time: '5 hours ago', read: false },
-    { id: 5, text: 'Critical lab result for John Doe', time: '6 hours ago', read: false },
-    { id: 6, text: 'New staff member added to the system', time: '8 hours ago', read: true },
-    { id: 7, text: 'Weekly analytics report generated', time: '1 day ago', read: true },
-  ]);
 
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark';
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.className = `${theme}-theme`;
     localStorage.setItem('theme', theme);
   }, [theme]);
@@ -64,7 +85,7 @@ export const AppDataProvider = ({ children }) => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isNotificationDropdownOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -104,7 +125,30 @@ export const AppDataProvider = ({ children }) => {
 
   const addTest = (test) => {
     const newId = `T-${Math.floor(Math.random() * 9000) + 1000}`;
-    setTests(prev => [{ ...test, id: newId, status: 'Pending', date: new Date().toISOString().split('T')[0], age: 'N/A', sex: 'Other', results: DEFAULT_TEST_RESULTS }, ...prev]);
+    const today = new Date().toISOString().split('T')[0];
+    setTests(prev => [{ ...test, id: newId, status: 'Pending', date: today, age: test.age || 'N/A', sex: test.sex || 'Other', results: DEFAULT_TEST_RESULTS }, ...prev]);
+    
+    // Auto-create patient if one with this name doesn't exist yet
+    const patientExists = patients.some(p => p.name.toLowerCase() === test.patient.toLowerCase());
+    if (!patientExists) {
+      const patientId = `P-${Math.floor(Math.random() * 9000) + 1000}`;
+      setPatients(prev => [{ 
+        id: patientId, 
+        name: test.patient, 
+        age: test.age || 'N/A', 
+        gender: test.sex || 'Other', 
+        lastVisit: today, 
+        status: 'Active' 
+      }, ...prev]);
+    } else {
+      // Update existing patient's lastVisit
+      setPatients(prev => prev.map(p => 
+        p.name.toLowerCase() === test.patient.toLowerCase() 
+          ? { ...p, lastVisit: today, status: 'Active' }
+          : p
+      ));
+    }
+    
     addNotification(`New test ${newId} created for ${test.patient}`);
     addToast(`Test report created for ${test.patient}.`, 'success');
   };
