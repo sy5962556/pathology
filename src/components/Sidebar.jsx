@@ -15,7 +15,7 @@ const Sidebar = () => {
     <aside className="sidebar glass-panel">
       <div className="sidebar-brand">
         <Activity className="brand-icon" size={28} />
-        <h2>PathoPro</h2>
+        <h2>NeedyPath</h2>
       </div>
       <nav className="sidebar-nav">
         {navItems.map((item) => (
@@ -33,7 +33,7 @@ const Sidebar = () => {
         <div className="user-info">
           <div className="avatar">DR</div>
           <div className="user-details">
-            <span className="user-name">Dr. Sarah Smith</span>
+            <span className="user-name">Dr. Sunny yadav</span>
             <span className="user-role">Lead Pathologist</span>
           </div>
         </div>
