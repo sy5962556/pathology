@@ -47,15 +47,15 @@ const DEFAULT_PATIENTS = [
 ];
 
 const DEFAULT_TESTS = [
-  { id: 'T-1042', patient: 'James Wilson', type: 'Complete Blood Count', doctor: 'Dr. Smith', date: getRecentDate(2), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '62', sex: 'Male' },
-  { id: 'T-1043', patient: 'Maria Garcia', type: 'Lipid Panel', doctor: 'Dr. Adams', date: getRecentDate(1), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '45', sex: 'Female' },
-  { id: 'T-1044', patient: 'Robert Chen', type: 'Thyroid Function', doctor: 'Dr. Smith', date: getRecentDate(15), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '28', sex: 'Male' },
-  { id: 'T-1045', patient: 'Anita Patel', type: 'Urinalysis', doctor: 'Dr. Lee', date: getRecentDate(0), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '34', sex: 'Female' },
-  { id: 'T-1046', patient: 'David Smith', type: 'Glucose Tolerance', doctor: 'Dr. Adams', date: getRecentDate(5), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '51', sex: 'Male' },
-  { id: 'T-1047', patient: 'Elena Rostova', type: 'Liver Panel', doctor: 'Dr. Lee', date: getRecentDate(0), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '39', sex: 'Female' },
-  { id: 'T-1048', patient: 'John Doe', type: 'Basic Metabolic Panel', doctor: 'Dr. Smith', date: getRecentDate(3), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '29', sex: 'Male' },
-  { id: 'T-1049', patient: 'Sarah Miller', type: 'WBC Count', doctor: 'Dr. Adams', date: getRecentDate(4), status: 'In Progress', results: DEFAULT_TEST_RESULTS, age: '41', sex: 'Female' },
-  { id: 'T-1050', patient: 'Michael Brown', type: 'Hemoglobin A1c', doctor: 'Dr. Lee', date: getRecentDate(2), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '55', sex: 'Male' },
+  { id: 'T 0001', patient: 'James Wilson', type: 'Complete Blood Count', doctor: 'Dr. Smith', date: getRecentDate(2), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '62', sex: 'Male' },
+  { id: 'T 0002', patient: 'Maria Garcia', type: 'Lipid Panel', doctor: 'Dr. Adams', date: getRecentDate(1), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '45', sex: 'Female' },
+  { id: 'T 0003', patient: 'Robert Chen', type: 'Thyroid Function', doctor: 'Dr. Smith', date: getRecentDate(15), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '28', sex: 'Male' },
+  { id: 'T 0004', patient: 'Anita Patel', type: 'Urinalysis', doctor: 'Dr. Lee', date: getRecentDate(0), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '34', sex: 'Female' },
+  { id: 'T 0005', patient: 'David Smith', type: 'Glucose Tolerance', doctor: 'Dr. Adams', date: getRecentDate(5), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '51', sex: 'Male' },
+  { id: 'T 0006', patient: 'Elena Rostova', type: 'Liver Panel', doctor: 'Dr. Lee', date: getRecentDate(0), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '39', sex: 'Female' },
+  { id: 'T 0007', patient: 'John Doe', type: 'Basic Metabolic Panel', doctor: 'Dr. Smith', date: getRecentDate(3), status: 'Completed', results: DEFAULT_TEST_RESULTS, age: '29', sex: 'Male' },
+  { id: 'T 0008', patient: 'Sarah Miller', type: 'WBC Count', doctor: 'Dr. Adams', date: getRecentDate(4), status: 'In Progress', results: DEFAULT_TEST_RESULTS, age: '41', sex: 'Female' },
+  { id: 'T 0009', patient: 'Michael Brown', type: 'Hemoglobin A1c', doctor: 'Dr. Lee', date: getRecentDate(2), status: 'Pending', results: DEFAULT_TEST_RESULTS, age: '55', sex: 'Male' },
 ];
 
 
@@ -108,7 +108,16 @@ export const AppDataProvider = ({ children }) => {
   };
 
   const addTest = (test) => {
-    const newId = `T-${Math.floor(Math.random() * 9000) + 1000}`;
+    // Find the current max numeric ID
+    const maxIdStr = tests.length > 0 
+      ? tests.reduce((max, t) => {
+          const num = parseInt(t.id.replace(/[^0-9]/g, ''));
+          return num > max ? num : max;
+        }, 0)
+      : 0;
+    
+    const nextIdNum = maxIdStr + 1;
+    const newId = `T ${nextIdNum.toString().padStart(4, '0')}`;
     const today = new Date().toISOString().split('T')[0];
     setTests(prev => [{ ...test, id: newId, status: 'Pending', date: today, age: test.age || 'N/A', sex: test.sex || 'Other', results: DEFAULT_TEST_RESULTS }, ...prev]);
     
@@ -146,6 +155,16 @@ export const AppDataProvider = ({ children }) => {
     addToast(`Test ${id} deleted.`, 'error');
   };
 
+  const LAB_CONFIG = {
+    name: 'DRLOGY PATHOLOGY LAB',
+    address: '105 - 108, SMART VISION COMPLEX, HEALTHCARE ROAD, OPPOSITE HEALTHCARE COMPLEX, MUMBAI - 689578',
+    phone: '0123456789 | 0912345678',
+    email: 'drlogypathlab@drlogy.com',
+    website: 'www.drlogy.com',
+    instruments: 'Fully automated cell counter - Mindray 300',
+    location: '125, Shivam Bungalow, S G Road, Mumbai'
+  };
+
   return (
     <AppDataContext.Provider value={{
       patients, addPatient,
@@ -155,7 +174,8 @@ export const AppDataProvider = ({ children }) => {
       globalSearchQuery, setGlobalSearchQuery,
       isSidebarOpen, setIsSidebarOpen,
       theme, toggleTheme,
-      toasts, addToast, removeToast
+      toasts, addToast, removeToast,
+      LAB_CONFIG
     }}>
       {children}
     </AppDataContext.Provider>

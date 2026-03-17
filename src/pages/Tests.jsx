@@ -142,7 +142,11 @@ const Tests = () => {
                    </span>
                  </td>
                   <td data-pdf-id={t.id}>
-                    <PDFGenerator test={t} addToast={addToast} />
+                    {t.status === 'Completed' ? (
+                      <PDFGenerator test={t} addToast={addToast} />
+                    ) : (
+                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', opacity: 0.6 }}>N/A</span>
+                    )}
                   </td>
                   <td>
                     <div className="action-buttons-group">

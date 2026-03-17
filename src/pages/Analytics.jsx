@@ -3,13 +3,12 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
-import { Download, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
 import './Analytics.css';
 
 const generateDynamicData = (category, count, actualTests = []) => {
   const trends = [];
-  const revenue = [];
   
   const today = new Date();
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -35,7 +34,6 @@ const generateDynamicData = (category, count, actualTests = []) => {
     let completed = 0;
     let pending = 0;
     
-    // Simple grouping logic for SEED data visiblity
     actualTests.forEach(test => {
       const testDate = new Date(test.date);
       let match = false;
@@ -48,9 +46,10 @@ const generateDynamicData = (category, count, actualTests = []) => {
         const d = new Date();
         d.setMonth(today.getMonth() - (count - 1 - i));
         match = testDate.getMonth() === d.getMonth() && testDate.getFullYear() === d.getFullYear();
-      } else {
-        // Fallback random for weekly/yearly mock if not enough data range
-        match = Math.random() > 0.7;
+      } else if (category === 'WEEKLY') {
+        // Simple week numbering within the current month for seed/simple cases
+        const currentMonth = today.getMonth();
+        match = testDate.getMonth() === currentMonth && Math.floor(testDate.getDate() / 7) === i;
       }
       
       if (match) {
@@ -61,13 +60,8 @@ const generateDynamicData = (category, count, actualTests = []) => {
 
     trends.push({
       label,
-      completed: completed || Math.floor(Math.random() * 2),
-      pending: pending || Math.floor(Math.random() * 1)
-    });
-    
-    revenue.push({
-      label,
-      revenue: (completed * 150) + (pending * 50) || Math.floor(Math.random() * 100)
+      completed,
+      pending
     });
   }
 
@@ -85,30 +79,25 @@ const generateDynamicData = (category, count, actualTests = []) => {
   }));
 
   if (categories.length === 0) {
-    categories.push({ name: 'No Data', value: 1, color: 'var(--text-secondary)' });
+    categories.push({ name: 'No Data', value: 0, color: 'var(--text-secondary)' });
   }
 
   const currentVolume = actualTests.length;
-  const previousVolume = Math.max(0, currentVolume - 2); // Simulated comparison
+  const completedTests = actualTests.filter(t => t.status === 'Completed').length;
+  const efficiency = actualTests.length > 0 ? Math.round((completedTests / actualTests.length) * 100) : 0;
 
   return {
     trends,
-    revenue,
     categories,
     stats: {
       volume: { 
         current: currentVolume, 
-        previous: previousVolume, 
+        previous: 0,
         unit: 'Tests' 
       },
-      revenue: { 
-        current: actualTests.reduce((sum, t) => sum + (t.status === 'Completed' ? 150 : 50), 0), 
-        previous: Math.floor(actualTests.reduce((sum, t) => sum + (t.status === 'Completed' ? 150 : 50), 0) * 0.8), 
-        unit: '$' 
-      },
       efficiency: { 
-        current: 98, 
-        previous: 95, 
+        current: efficiency, 
+        previous: 0, 
         unit: '%' 
       }
     }
@@ -185,7 +174,7 @@ const Analytics = () => {
         <div className="analytics-actions">
           <div className="custom-dropdown-wrapper" ref={dropdownRef}>
             <button className="icon-btn-text" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-              <Calendar size={18} /> {formatSelectionLabel()}
+              <Calendar size={18} /> Show Data
             </button>
             {isDropdownOpen && (
               <div className="nested-dropdown glass-panel animate-fade-in">
@@ -230,9 +219,6 @@ const Analytics = () => {
               </div>
             )}
           </div>
-          <button className="primary-btn">
-            <Download size={18} /> Export Data
-          </button>
         </div>
       </div>
 
@@ -244,7 +230,7 @@ const Analytics = () => {
               <span className="stat-label">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
               <div className="stat-value-row">
                 <h2 className="stat-main-value">
-                  {stat.unit === '$' ? `$${stat.current.toLocaleString()}` : `${stat.current}${stat.unit}`}
+                  {stat.current}{stat.unit}
                 </h2>
                 <span className={`comparison-badge ${change.isPositive ? 'positive' : 'negative'}`}>
                   {change.isPositive ? '↑' : '↓'} {change.value}%
@@ -302,32 +288,6 @@ const Analytics = () => {
                 <Tooltip content={<CustomTooltip />} />
                 <Legend iconType="circle" layout="vertical" verticalAlign="bottom" align="center" />
               </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="chart-card glass-panel span-3">
-          <div className="chart-header">
-            <h3>Revenue Overview</h3>
-            <p>Estimated revenue generation over the selected period</p>
-          </div>
-          <div className="chart-container" style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data.revenue} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
-                <XAxis dataKey="label" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} />
-                <YAxis stroke="var(--text-secondary)" tick={{ fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} tickFormatter={(val) => `$${val}`} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  name="Revenue ($)" 
-                  stroke="var(--accent-success)" 
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: "var(--bg-surface)", strokeWidth: 2 }}
-                  activeDot={{ r: 6, fill: "var(--accent-success)" }}
-                />
-              </LineChart>
             </ResponsiveContainer>
           </div>
         </div>

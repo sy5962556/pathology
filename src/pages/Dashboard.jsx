@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, FileText, Activity, Clock, Search } from 'lucide-react';
+import { FileText, Activity, Clock, Search, CheckCircle, BarChart3 } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
 import './Dashboard.css';
 
@@ -10,10 +10,10 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const stats = [
-    { label: 'Total Patients', value: patients.length.toLocaleString(), icon: <Users />, trend: 'Actual', color: 'var(--accent-primary)' },
-    { label: 'Pending Reports', value: tests.filter(t => t.status !== 'Completed').length, icon: <Clock />, trend: 'Live', color: 'var(--accent-secondary)' },
-    { label: 'Completed Tests', value: tests.filter(t => t.status === 'Completed').length, icon: <FileText />, trend: 'Live', color: 'var(--accent-success)' },
-    { label: 'Active Facilities', value: '1', icon: <Activity />, trend: 'Main', color: '#a371f7' }
+    { label: 'Total Reports', value: tests.length.toString(), icon: <BarChart3 />, trend: 'Actual', color: 'var(--accent-primary)' },
+    { label: 'Completed', value: tests.filter(t => t.status === 'Completed').length.toString(), icon: <CheckCircle />, trend: 'Live', color: 'var(--accent-success)' },
+    { label: 'In Progress', value: tests.filter(t => t.status === 'In Progress').length.toString(), icon: <Activity />, trend: 'Live', color: 'var(--accent-secondary)' },
+    { label: 'Pending', value: tests.filter(t => t.status === 'Pending').length.toString(), icon: <Clock />, trend: 'Live', color: '#f78166' }
   ];
 
   const filteredTests = tests.filter(t => 

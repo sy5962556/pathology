@@ -2,9 +2,11 @@ import React, { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { Download } from 'lucide-react';
+import { useAppData } from '../context/AppDataContext';
 import '../pages/ReportView.css';
 
 const PDFGenerator = ({ test, addToast }) => {
+  const { LAB_CONFIG } = useAppData();
   const printRef = useRef();
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -81,21 +83,21 @@ const PDFGenerator = ({ test, addToast }) => {
             <div className="header-left">
               <div className="logo-circle"><span className="plus-sign">+</span></div>
               <div className="clinic-details">
-                <h1>DRLOGY <span className="blue-text">PATHOLOGY LAB</span></h1>
+                <h1>{LAB_CONFIG.name.split(' ')[0]} <span className="blue-text">{LAB_CONFIG.name.split(' ').slice(1).join(' ')}</span></h1>
                 <div className="tagline">
                   <span className="icon">🔬</span> <strong>Accurate</strong> | <strong>Caring</strong> | <strong>Instant</strong>
                 </div>
-                <p className="address">105 -108, SMART VISION COMPLEX, HEALTHCARE ROAD, OPPOSITE HEALTHCARE COMPLEX. MUMBAI - 689578</p>
+                <p className="address">{LAB_CONFIG.address}</p>
               </div>
             </div>
             <div className="header-right">
-              <p>📞 0123456789 | 0912345678</p>
-              <p>✉️ drlogypathlab@drlogy.com</p>
+              <p>📞 {LAB_CONFIG.phone}</p>
+              <p>✉️ {LAB_CONFIG.email}</p>
             </div>
           </div>
 
           <div className="stripe-bar">
-            <span>www.drlogy.com</span>
+            <span>{LAB_CONFIG.website}</span>
           </div>
 
           <div className="patient-box">
@@ -110,14 +112,14 @@ const PDFGenerator = ({ test, addToast }) => {
             </div>
             <div className="patient-col ref-col">
               <p><strong>Sample Collected At:</strong></p>
-              <p>125, Shivam Bungalow, S G Road, <br />Mumbai</p>
+              <p>{LAB_CONFIG.location}</p>
               <p className="dr-ref"><strong>Ref. By:</strong> {test.doctor}</p>
             </div>
             <div className="patient-col date-col">
               <div className="mock-barcode">||||||||||||||||||||||||||||</div>
-              <p><strong>Registered on:</strong> 02:31 PM {test.date}</p>
-              <p><strong>Collected on:</strong> 03:11 PM {test.date}</p>
-              <p><strong>Reported on:</strong> 04:35 PM {test.date}</p>
+              <p><strong>Registered on:</strong> 09:30 AM {test.date}</p>
+              <p><strong>Collected on:</strong> 10:15 AM {test.date}</p>
+              <p><strong>Reported on:</strong> 04:45 PM {test.date}</p>
             </div>
           </div>
 
@@ -165,7 +167,7 @@ const PDFGenerator = ({ test, addToast }) => {
           </table>
 
           <div className="report-footer-section" style={{ marginTop: '100px' }}>
-            <p className="instruments"><strong>Instruments:</strong> Fully automated cell counter - Mindray 300</p>
+            <p className="instruments"><strong>Instruments:</strong> {LAB_CONFIG.instruments}</p>
             <div className="signature-area">
               <div className="sig-box">
                 <p className="thanks">Thanks for Reference</p>
@@ -193,7 +195,7 @@ const PDFGenerator = ({ test, addToast }) => {
           <div className="bottom-bar">
             <div className="delivery-truck"><span role="img" aria-label="motorcycle">🛵</span></div>
             <div className="bottom-text">Sample Collection</div>
-            <div className="bottom-phone"><span className="wa-icon">🟢</span> 0123456789</div>
+            <div className="bottom-phone"><span className="wa-icon">🟢</span> {LAB_CONFIG.phone.split('|')[0].trim()}</div>
           </div>
         </div>
       </div>

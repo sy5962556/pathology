@@ -7,15 +7,17 @@ import './ReportView.css';
 const ReportView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tests } = useAppData();
+  const { tests, LAB_CONFIG } = useAppData();
 
   const testRecord = tests.find(t => t.id === id) || {
-    id: 'T-555',
+    id: 'T 0000',
     patient: 'Yash M. Patel',
     type: 'Complete Blood Count (CBC)',
-    date: '202X-12-02',
+    date: new Date().toISOString().split('T')[0],
     doctor: 'Dr. Hiren Shah',
-    status: 'Completed'
+    status: 'Completed',
+    age: '21 Years',
+    sex: 'Male'
   };
 
   const handlePrint = () => {
@@ -41,29 +43,29 @@ const ReportView = () => {
               <span className="plus-sign">+</span>
             </div>
             <div className="clinic-details">
-              <h1>DRLOGY <span className="blue-text">PATHOLOGY LAB</span></h1>
+              <h1>{LAB_CONFIG.name.split(' ')[0]} <span className="blue-text">{LAB_CONFIG.name.split(' ').slice(1).join(' ')}</span></h1>
               <div className="tagline">
                 <span className="icon">🔬</span> <strong>Accurate</strong> | <strong>Caring</strong> | <strong>Instant</strong>
               </div>
-              <p className="address">105 -108, SMART VISION COMPLEX, HEALTHCARE ROAD, OPPOSITE HEALTHCARE COMPLEX. MUMBAI - 689578</p>
+              <p className="address">{LAB_CONFIG.address}</p>
             </div>
           </div>
           <div className="header-right">
-            <p>📞 0123456789 | 0912345678</p>
-            <p>✉️ drlogypathlab@drlogy.com</p>
+            <p>📞 {LAB_CONFIG.phone}</p>
+            <p>✉️ {LAB_CONFIG.email}</p>
           </div>
         </div>
 
         <div className="stripe-bar">
-          <span>www.drlogy.com</span>
+          <span>{LAB_CONFIG.website}</span>
         </div>
 
         {/* Patient Details */}
         <div className="patient-box">
           <div className="patient-col">
             <h2 className="patient-name">{testRecord.patient}</h2>
-            <p><strong>Age:</strong> {testRecord.age || '21 Years'}</p>
-            <p><strong>Sex:</strong> {testRecord.sex || 'Male'}</p>
+            <p><strong>Age:</strong> {testRecord.age}</p>
+            <p><strong>Sex:</strong> {testRecord.sex}</p>
             <p><strong>PID:</strong> {testRecord.id.replace('T-', '')}</p>
           </div>
           <div className="patient-col qr-col">
@@ -71,14 +73,14 @@ const ReportView = () => {
           </div>
           <div className="patient-col ref-col">
              <p><strong>Sample Collected At:</strong></p>
-             <p>125, Shivam Bungalow, S G Road, <br/>Mumbai</p>
+             <p>{LAB_CONFIG.location}</p>
              <p className="dr-ref"><strong>Ref. By:</strong> {testRecord.doctor}</p>
           </div>
           <div className="patient-col date-col">
              <div className="mock-barcode">||||||||||||||||||||||||||||</div>
-             <p><strong>Registered on:</strong> 02:31 PM {testRecord.date}</p>
-             <p><strong>Collected on:</strong> 03:11 PM {testRecord.date}</p>
-             <p><strong>Reported on:</strong> 04:35 PM {testRecord.date}</p>
+             <p><strong>Registered on:</strong> 09:30 AM {testRecord.date}</p>
+             <p><strong>Collected on:</strong> 10:15 AM {testRecord.date}</p>
+             <p><strong>Reported on:</strong> 04:45 PM {testRecord.date}</p>
           </div>
         </div>
 
@@ -131,7 +133,7 @@ const ReportView = () => {
 
         {/* Footer Area */}
         <div className="report-footer-section">
-          <p className="instruments"><strong>Instruments:</strong> Fully automated cell counter - Mindray 300</p>
+          <p className="instruments"><strong>Instruments:</strong> {LAB_CONFIG.instruments}</p>
           <div className="signature-area">
             <div className="sig-box">
               <p className="thanks">Thanks for Reference</p>
@@ -169,7 +171,7 @@ const ReportView = () => {
           </div>
           <div className="bottom-text">Sample Collection</div>
           <div className="bottom-phone">
-            <span className="wa-icon">🟢</span> 0123456789
+            <span className="wa-icon">🟢</span> {LAB_CONFIG.phone.split('|')[0].trim()}
           </div>
         </div>
 
