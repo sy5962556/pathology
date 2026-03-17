@@ -8,7 +8,7 @@ import { useAppData } from '../context/AppDataContext';
 import './Layout.css';
 
 const Layout = () => {
-  const { isNotificationDropdownOpen, isSidebarOpen, setIsSidebarOpen } = useAppData();
+  const { isSidebarOpen, setIsSidebarOpen } = useAppData();
   const location = useLocation();
 
   // Close sidebar on route change (mobile)
@@ -23,12 +23,12 @@ const Layout = () => {
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
       )}
       
-      <div className={isNotificationDropdownOpen ? 'content-blur' : ''} style={{ display: 'contents' }}>
+      <div style={{ display: 'contents' }}>
         <Sidebar />
       </div>
       <div className="main-wrapper">
         <Header />
-        <main className={`main-content ${isNotificationDropdownOpen ? 'content-blur' : ''}`}>
+        <main className="main-content">
           <Outlet />
         </main>
       </div>

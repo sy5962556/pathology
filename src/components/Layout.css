@@ -195,24 +195,7 @@
   transform: translateY(-2px);
 }
 
-.notification-dot {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  width: 10px;
-  height: 10px;
-  background: var(--accent-secondary);
-  border-radius: 50%;
-  border: 2px solid var(--bg-color);
-  box-shadow: 0 0 8px var(--accent-secondary);
-  animation: dot-pulse 2s infinite ease-in-out;
-}
 
-@keyframes dot-pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
-}
 
 .primary-btn {
   background: linear-gradient(135deg, #1f6feb, #388bfd);
@@ -246,194 +229,9 @@
   min-height: 0;
 }
 
-/* Notification Dropdown Styles */
-.notification-wrapper {
-  position: relative;
-}
 
-.notification-dropdown {
-  position: absolute;
-  top: 100%;
-  right: -10px;
-  width: 380px;
-  max-height: 500px;
-  margin-top: 16px;
-  background: var(--bg-notification);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-              inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
 
-.light-theme .notification-dropdown {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 
-              inset 0 1px 1px rgba(255, 255, 255, 0.5);
-}
 
-.dropdown-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-header h3 {
-  font-size: 1.1rem;
-  margin: 0;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.mark-read-btn {
-  background: var(--accent-primary);
-  border: none;
-  color: #fff;
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.mark-read-btn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.light-theme .mark-read-btn {
-  background: #000;
-  color: #fff;
-}
-
-.notification-list {
-  overflow-y: auto;
-  flex: 1;
-  max-height: 400px;
-}
-
-.notification-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.notification-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.notification-list::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 10px;
-}
-
-.notification-list::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
-.empty-notifications {
-  padding: 48px 24px;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-}
-
-.notification-item {
-  padding: 18px 20px;
-  display: flex;
-  gap: 16px;
-  border-bottom: 1px solid var(--border-color);
-  transition: var(--transition);
-  position: relative;
-}
-
-.notification-item:hover {
-  background: var(--bg-surface-hover);
-  padding-left: 24px;
-}
-
-.notification-item.unread {
-  background: rgba(88, 166, 255, 0.05);
-}
-
-.notification-item.unread::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--accent-primary);
-}
-
-.notif-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-top: 6px;
-  flex-shrink: 0;
-}
-
-.unread .notif-dot {
-  background: var(--accent-primary);
-  box-shadow: 0 0 10px var(--accent-primary);
-}
-
-.notification-item.read {
-  opacity: 0.7;
-}
-
-.notif-content p {
-  margin: 0 0 6px 0;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-
-.notif-time {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  display: block;
-}
-
-.notif-action-btn {
-  background: var(--border-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.light-theme .notif-action-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #000;
-}
-
-.notif-action-btn:hover {
-  background: var(--accent-success);
-  color: white;
-  border-color: var(--accent-success);
-  transform: scale(1.1);
-}
 
 .theme-toggle {
   margin-right: 8px;
@@ -521,8 +319,5 @@
     font-size: 0.8rem;
   }
 
-  .notification-dropdown {
-    width: calc(100vw - 32px);
-    right: -50px;
-  }
+
 }

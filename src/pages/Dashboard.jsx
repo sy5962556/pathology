@@ -9,15 +9,11 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const basePatients = 1278; 
-  const basePending = 35;
-  const baseCompleted = 449;
-
   const stats = [
-    { label: 'Total Patients', value: (basePatients + patients.length).toLocaleString(), icon: <Users />, trend: '+12%', color: 'var(--accent-primary)' },
-    { label: 'Pending Reports', value: basePending + tests.filter(t => t.status !== 'Completed').length, icon: <Clock />, trend: '-5%', color: 'var(--accent-secondary)' },
-    { label: 'Completed Tests', value: baseCompleted + tests.filter(t => t.status === 'Completed').length, icon: <FileText />, trend: '+8%', color: 'var(--accent-success)' },
-    { label: 'Active Facilities', value: '3', icon: <Activity />, trend: '0%', color: '#a371f7' }
+    { label: 'Total Patients', value: patients.length.toLocaleString(), icon: <Users />, trend: 'Actual', color: 'var(--accent-primary)' },
+    { label: 'Pending Reports', value: tests.filter(t => t.status !== 'Completed').length, icon: <Clock />, trend: 'Live', color: 'var(--accent-secondary)' },
+    { label: 'Completed Tests', value: tests.filter(t => t.status === 'Completed').length, icon: <FileText />, trend: 'Live', color: 'var(--accent-success)' },
+    { label: 'Active Facilities', value: '1', icon: <Activity />, trend: 'Main', color: '#a371f7' }
   ];
 
   const filteredTests = tests.filter(t => 
@@ -26,7 +22,7 @@ const Dashboard = () => {
     t.type.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const recentTests = filteredTests;
+  const recentTests = filteredTests.slice(0, 5);
 
   return (
     <div className="dashboard animate-fade-in">

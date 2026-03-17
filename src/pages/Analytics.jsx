@@ -4,9 +4,10 @@ import {
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
 import { Download, Calendar } from 'lucide-react';
+import { useAppData } from '../context/AppDataContext';
 import './Analytics.css';
 
-const generateDynamicData = (category, count) => {
+const generateDynamicData = (category, count, actualTests = []) => {
   const trends = [];
   const revenue = [];
   
@@ -28,55 +29,86 @@ const generateDynamicData = (category, count) => {
     YEARLY: (i) => (today.getFullYear() - (count - 1 - i)).toString()
   };
 
-  const revenueLabels = labels;
-
+  // Group tests by date for trends
   for (let i = 0; i < count; i++) {
+    const label = labels[category](i);
+    let completed = 0;
+    let pending = 0;
+    
+    // Simple grouping logic for SEED data visiblity
+    actualTests.forEach(test => {
+      const testDate = new Date(test.date);
+      let match = false;
+      
+      if (category === 'DAILY') {
+        const d = new Date();
+        d.setDate(today.getDate() - (count - 1 - i));
+        match = testDate.toDateString() === d.toDateString();
+      } else if (category === 'MONTHLY') {
+        const d = new Date();
+        d.setMonth(today.getMonth() - (count - 1 - i));
+        match = testDate.getMonth() === d.getMonth() && testDate.getFullYear() === d.getFullYear();
+      } else {
+        // Fallback random for weekly/yearly mock if not enough data range
+        match = Math.random() > 0.7;
+      }
+      
+      if (match) {
+        if (test.status === 'Completed') completed++;
+        else pending++;
+      }
+    });
+
     trends.push({
-      label: labels[category](i),
-      completed: Math.floor(Math.random() * 50) + 50,
-      pending: Math.floor(Math.random() * 20) + 5
+      label,
+      completed: completed || Math.floor(Math.random() * 2),
+      pending: pending || Math.floor(Math.random() * 1)
     });
     
     revenue.push({
-      label: revenueLabels[category](i),
-      revenue: Math.floor(Math.random() * 5000) + 2000
+      label,
+      revenue: (completed * 150) + (pending * 50) || Math.floor(Math.random() * 100)
     });
   }
 
-  const baseStats = {
-    DAILY: { volume: 20, revenue: 1000, efficiency: 90 },
-    WEEKLY: { volume: 150, revenue: 8000, efficiency: 92 },
-    MONTHLY: { volume: 600, revenue: 30000, efficiency: 94 },
-    YEARLY: { volume: 2500, revenue: 120000, efficiency: 95 }
-  };
+  // Calculate actual categories
+  const categoryCounts = actualTests.reduce((acc, test) => {
+    acc[test.type] = (acc[test.type] || 0) + 1;
+    return acc;
+  }, {});
 
-  const currentMult = count * (0.9 + Math.random() * 0.2);
-  const prevMult = count * (0.8 + Math.random() * 0.2);
+  const colors = ['#58a6ff', '#3fb950', '#e3b341', '#a371f7', '#f78166'];
+  const categories = Object.entries(categoryCounts).map(([name, value], index) => ({
+    name,
+    value,
+    color: colors[index % colors.length]
+  }));
+
+  if (categories.length === 0) {
+    categories.push({ name: 'No Data', value: 1, color: 'var(--text-secondary)' });
+  }
+
+  const currentVolume = actualTests.length;
+  const previousVolume = Math.max(0, currentVolume - 2); // Simulated comparison
 
   return {
     trends,
     revenue,
-    categories: [
-      { name: 'Blood Test', value: 45 * count, color: '#58a6ff' },
-      { name: 'Lipid Profile', value: 30 * count, color: '#3fb950' },
-      { name: 'Thyroid', value: 20 * count, color: '#e3b341' },
-      { name: 'Urinalysis', value: 15 * count, color: '#a371f7' },
-      { name: 'Other', value: 10 * count, color: '#f78166' }
-    ],
+    categories,
     stats: {
       volume: { 
-        current: Math.floor(baseStats[category].volume * currentMult), 
-        previous: Math.floor(baseStats[category].volume * prevMult), 
+        current: currentVolume, 
+        previous: previousVolume, 
         unit: 'Tests' 
       },
       revenue: { 
-        current: Math.floor(baseStats[category].revenue * currentMult), 
-        previous: Math.floor(baseStats[category].revenue * prevMult), 
+        current: actualTests.reduce((sum, t) => sum + (t.status === 'Completed' ? 150 : 50), 0), 
+        previous: Math.floor(actualTests.reduce((sum, t) => sum + (t.status === 'Completed' ? 150 : 50), 0) * 0.8), 
         unit: '$' 
       },
       efficiency: { 
-        current: Math.min(99, Math.floor(baseStats[category].efficiency + Math.random() * 5)), 
-        previous: Math.floor(baseStats[category].efficiency), 
+        current: 98, 
+        previous: 95, 
         unit: '%' 
       }
     }
@@ -100,6 +132,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Analytics = () => {
+  const { tests } = useAppData();
   const timeframeOptions = {
     DAILY: { label: 'Daily View', unitPrefix: 'Last', unit: 'Days', counts: [1, 2, 3, 4, 5, 6] },
     WEEKLY: { label: 'Weekly View', unitPrefix: 'Last', unit: 'Weeks', counts: [1, 2, 3, 4, 5] },
@@ -113,8 +146,8 @@ const Analytics = () => {
   const dropdownRef = React.useRef(null);
 
   const data = React.useMemo(() => 
-    generateDynamicData(selection.category, selection.count),
-    [selection.category, selection.count]
+    generateDynamicData(selection.category, selection.count, tests),
+    [selection.category, selection.count, tests]
   );
 
   React.useEffect(() => {

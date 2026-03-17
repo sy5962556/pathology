@@ -5,12 +5,11 @@ import Modal from './Modal';
 const GlobalModals = () => {
   const {
     isNewPatientModalOpen, setIsNewPatientModalOpen, addPatient,
-    isNewReportModalOpen, setIsNewReportModalOpen, addTest,
-    patients
+    isNewReportModalOpen, setIsNewReportModalOpen, addTest
   } = useAppData();
 
   const [patientData, setPatientData] = useState({ name: '', age: '', gender: 'Female' });
-  const [testData, setTestData] = useState({ patient: '', type: 'Complete Blood Count', doctor: 'Dr. Smith' });
+  const [testData, setTestData] = useState({ patient: '', age: '', sex: 'Male', type: 'Complete Blood Count', doctor: 'Dr. Smith' });
 
   const handlePatientSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +25,7 @@ const GlobalModals = () => {
     if (testData.patient) {
       addTest(testData);
       setIsNewReportModalOpen(false);
-      setTestData({ patient: '', type: 'Complete Blood Count', doctor: 'Dr. Smith' });
+      setTestData({ patient: '', age: '', sex: 'Male', type: 'Complete Blood Count', doctor: 'Dr. Smith' });
     }
   };
 
@@ -63,12 +62,39 @@ const GlobalModals = () => {
         <form onSubmit={handleTestSubmit}>
           <div className="form-group">
             <label>Patient Name</label>
-            <select className="form-select" required value={testData.patient} onChange={e => setTestData({ ...testData, patient: e.target.value })}>
-              <option value="">-- Select Patient --</option>
-              {patients.map(p => (
-                <option key={p.id} value={p.name}>{p.name} ({p.id})</option>
-              ))}
-            </select>
+            <input 
+              type="text" 
+              className="form-input" 
+              required 
+              value={testData.patient} 
+              onChange={e => setTestData({ ...testData, patient: e.target.value })} 
+              placeholder="e.g. Maria Garcia"
+            />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-group">
+              <label>Age</label>
+              <input 
+                type="number" 
+                className="form-input" 
+                required 
+                value={testData.age} 
+                onChange={e => setTestData({ ...testData, age: e.target.value })} 
+                placeholder="e.g. 25"
+              />
+            </div>
+            <div className="form-group">
+              <label>Gender</label>
+              <select 
+                className="form-select" 
+                value={testData.sex} 
+                onChange={e => setTestData({ ...testData, sex: e.target.value })}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
           <div className="form-group">
             <label>Test Type</label>

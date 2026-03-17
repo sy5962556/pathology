@@ -13,7 +13,7 @@
   --bg-surface: rgba(22, 27, 34, 0.7);
   --bg-surface-rgb: 22, 27, 34;
   --bg-surface-solid: #161b22;
-  --bg-notification: #000000;
+
   --bg-surface-hover: rgba(33, 38, 45, 0.8);
   --bg-card: rgba(22, 27, 34, 0.5);
   --bg-input: rgba(0, 0, 0, 0.3);
@@ -54,7 +54,7 @@
   --bg-surface: rgba(255, 255, 255, 0.8);
   --bg-surface-rgb: 255, 255, 255;
   --bg-surface-solid: #ffffff;
-  --bg-notification: #bef264;
+
   --bg-surface-hover: rgba(246, 248, 250, 0.9);
   --bg-card: #ffffff;
   --bg-input: #ffffff;

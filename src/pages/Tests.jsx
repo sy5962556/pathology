@@ -180,7 +180,7 @@ const Tests = () => {
         </div>
 
         <div className="pagination">
-          <span className="page-info">Showing {filteredTests.length > 0 ? 1 : 0} to {filteredTests.length} of {(8486 + tests.length).toLocaleString()} tests</span>
+          <span className="page-info">Showing {filteredTests.length > 0 ? 1 : 0} to {filteredTests.length} of {tests.length.toLocaleString()} tests</span>
           <div className="page-controls">
             <button className="page-btn" disabled>Prev</button>
             <button className="page-btn active">1</button>
