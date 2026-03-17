@@ -127,6 +127,61 @@
   gap: 24px;
 }
 
+.filter-card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.filter-group input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: var(--transition);
+  height: 48px;
+  width: 100%;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(var(--accent-primary-rgb), 0.1);
+}
+
+.filter-group input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* Custom icon for date/month inputs in some browsers */
+.filter-group input::-webkit-calendar-picker-indicator {
+  filter: invert(var(--theme-invert, 1));
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.light-theme .filter-group input::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+
 .stat-card {
   padding: 24px;
   display: flex;
@@ -179,22 +234,6 @@
   margin: 0;
 }
 
-.icon-btn-text {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.icon-btn-text:hover {
-  background: var(--bg-surface-hover);
-}
 
 .analytics-grid {
   display: grid;
@@ -280,6 +319,12 @@
     grid-template-columns: 1fr;
   }
   
+  .filter-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+  
   .page-header {
     flex-direction: column;
     align-items: flex-start;
@@ -296,10 +341,6 @@
     width: 100%;
   }
   
-  .icon-btn-text {
-    width: 100%;
-    justify-content: center;
-  }
   
   .nested-dropdown {
     width: 100%;

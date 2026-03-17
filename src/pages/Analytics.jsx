@@ -134,9 +134,21 @@ const Analytics = () => {
   const [activeCategory, setActiveCategory] = React.useState(null);
   const dropdownRef = React.useRef(null);
 
+  // New filters state
+  const [filterDate, setFilterDate] = React.useState('');
+  const [filterMonth, setFilterMonth] = React.useState('');
+
+  const filteredTests = React.useMemo(() => {
+    return tests.filter(test => {
+      const matchesDate = !filterDate || test.date === filterDate;
+      const matchesMonth = !filterMonth || test.date.startsWith(filterMonth);
+      return matchesDate && matchesMonth;
+    });
+  }, [tests, filterDate, filterMonth]);
+
   const data = React.useMemo(() => 
-    generateDynamicData(selection.category, selection.count, tests),
-    [selection.category, selection.count, tests]
+    generateDynamicData(selection.category, selection.count, filteredTests),
+    [selection.category, selection.count, filteredTests]
   );
 
   React.useEffect(() => {
@@ -151,7 +163,7 @@ const Analytics = () => {
   }, []);
 
   const calculateChange = (current, previous) => {
-    const change = ((current - previous) / previous) * 100;
+    const change = previous === 0 ? (current > 0 ? 100 : 0) : ((current - previous) / previous) * 100;
     return {
       value: Math.abs(change).toFixed(1),
       isPositive: change >= 0
@@ -163,6 +175,9 @@ const Analytics = () => {
     const unitText = selection.count === 1 ? opt.unit.slice(0, -1) : opt.unit;
     return `${opt.unitPrefix} ${selection.count} ${unitText}`;
   };
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const currentMonthStr = todayStr.substring(0, 7);
 
   return (
     <div className="analytics-page animate-fade-in">
@@ -219,6 +234,27 @@ const Analytics = () => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="filter-card glass-panel">
+        <div className="filter-group">
+          <label>Filter by Date</label>
+          <input 
+            type="date" 
+            value={filterDate}
+            max={todayStr}
+            onChange={(e) => setFilterDate(e.target.value)}
+          />
+        </div>
+        <div className="filter-group">
+          <label>Filter by Month</label>
+          <input 
+            type="month" 
+            value={filterMonth}
+            max={currentMonthStr}
+            onChange={(e) => setFilterMonth(e.target.value)}
+          />
         </div>
       </div>
 

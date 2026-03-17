@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
-import { Printer, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import './ReportView.css';
 
 const ReportView = () => {
@@ -20,18 +20,11 @@ const ReportView = () => {
     sex: 'Male'
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="report-wrapper animate-fade-in">
       <div className="report-actions hide-on-print">
         <button className="icon-btn-text" onClick={() => navigate(-1)}>
           <ArrowLeft size={18} /> Back
-        </button>
-        <button className="primary-btn" onClick={handlePrint}>
-          <Printer size={18} /> Print Report
         </button>
       </div>
 
